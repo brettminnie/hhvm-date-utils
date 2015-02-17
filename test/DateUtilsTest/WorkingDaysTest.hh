@@ -163,7 +163,7 @@ class WorkingDaysTest extends \PHPUnit_Framework_TestCase
     public function testWorkingDaysOffsetNoDate()
     {
         $interval = new \DateInterval('PT30M');
-        $expected = (new \DateTime())->add(new \DateInterval($interval));
+        $expected = (new \DateTime())->add($interval);
         $result = $this->workingDays->workingDaysFromInterval(null, $interval);
 
         $this->assertEquals($expected, $result);
