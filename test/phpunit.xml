@@ -7,11 +7,11 @@
         syntaxCheck="false"
         verbose="true">
     <testsuite name="holiday-dates">
-        <directory>DateUtilsTest/</directory>
+        <directory suffix="Test.hh">DateUtilsTest/</directory>
     </testsuite>
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./../src</directory>
+            <directory suffix=".hh">./../src</directory>
         </whitelist>
     </filter>
     <php>
