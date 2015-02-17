@@ -63,7 +63,7 @@ class WorkingDays
      * @param  \DateInterval $workingDayOffset
      * @return \DateTime
      */
-    public function workingDaysFromInterval(?\DateTime $initialDate = null \DateInterval $workingDayOffset)
+    public function workingDaysFromInterval(?\DateTime $initialDate = null, ?\DateInterval $workingDayOffset = null)
     {
         if (null === $initialDate) {
             $initialDate = new \DateTime();
