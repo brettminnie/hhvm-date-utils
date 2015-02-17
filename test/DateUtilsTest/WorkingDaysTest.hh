@@ -154,7 +154,7 @@ class WorkingDaysTest extends \PHPUnit_Framework_TestCase
 
     public function testWorkingDayOffset()
     {
-        $expectedFromOffset = $this->workingDays->workingDaysFromToday('P10D');
+        $expectedFromOffset = $this->workingDays->workingDaysFromInterval(null, 'P10D');
         $expected           = $this->workingDays->workingDaysFromToday(10);
         $this->assertEquals($expected, $expectedFromOffset);
     }
@@ -163,7 +163,7 @@ class WorkingDaysTest extends \PHPUnit_Framework_TestCase
     {
         $interval = 'PT30M';
         $expected = (new \DateTime())->add(new \DateInterval($interval));
-        $result = $this->workingDays->workingDaysFromToday($interval);
+        $result = $this->workingDays->workingDaysFromInterval(null, $interval);
 
         $this->assertEquals($expected, $result);
 
@@ -189,6 +189,6 @@ class WorkingDaysTest extends \PHPUnit_Framework_TestCase
         $dateStamp = \DateTime::createFromFormat('d/m/Y H:i:s', '04/07/2014 23:00:59');
 
         $expected = \DateTime::createFromFormat('d/m/Y H:i:s', '07/07/2014 00:00:00');
-        $this->assertEquals($expected, $this->workingDays->workingDaysFrom($dateStamp, $interval));
+        $this->assertEquals($expected, $this->workingDays->workingDaysFromInterval($dateStamp, $interval));
     }
 }
