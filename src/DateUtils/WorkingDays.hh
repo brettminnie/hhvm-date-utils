@@ -11,9 +11,9 @@ class WorkingDays
     /**
      * @var array
      */
-    protected $config;
+    protected array<string> $config;
 
-    public function __construct(array $config)
+    public function __construct(array<string> $config)
     {
         $this->config = $config;
     }
@@ -24,7 +24,7 @@ class WorkingDays
      * @return \DateTime
      * @throws \LogicException
      */
-    public function workingDaysFrom(?\DateTime $initialDate = null, $workingDayOffset = 1)
+    public function workingDaysFrom(?\DateTime $initialDate = null, int $workingDayOffset = 1) : \DateTime
     {
         if (null === $initialDate) {
             $initialDate = new \DateTime();
@@ -68,7 +68,7 @@ class WorkingDays
      * @param \DateInterval $offset
      * @return \DateTime
      */
-    protected function workingDaysFromOffset(\DateTime $initialDate, \DateInterval $offset)
+    protected function workingDaysFromOffset(\DateTime $initialDate, \DateInterval $offset) : \DateTime
     {
         $targetDate = new \DateTime($initialDate->format(\DateTime::ISO8601));
         $diffDate = \DateTime::createFromFormat('Y-m-d h:i:s', $initialDate->format('Y-m-d 00:00:00'));
@@ -85,7 +85,7 @@ class WorkingDays
      * @param \DateTime $targetDate
      * @return bool
      */
-    public function isWorkingDay(\DateTime $targetDate)
+    public function isWorkingDay(\DateTime $targetDate) : bool
     {
         $holidays = $this->getBankHolidays($targetDate->format('Y'));
         $weekDays = range(1, 5);
@@ -104,7 +104,7 @@ class WorkingDays
      * @param int $workingDayOffset
      * @return \DateTime
      */
-    public function workingDaysFromToday($workingDayOffset = 1)
+    public function workingDaysFromToday(int $workingDayOffset = 1) : \DateTime
     {
         return $this->workingDaysFrom(null, $workingDayOffset);
     }
@@ -114,7 +114,7 @@ class WorkingDays
      * @param \DateTime $endDay
      * @return int
      */
-    public function workingDaysBetween(\DateTime $startDay, \DateTime $endDay)
+    public function workingDaysBetween(\DateTime $startDay, \DateTime $endDay) : int
     {
         $holidays = $this->getBankHolidays($startDay->format('Y'));
         $weekDays = range(1, 5);
@@ -146,7 +146,7 @@ class WorkingDays
      * @param  int $year
      * @return array
      */
-    protected function getBankHolidays($year)
+    protected function getBankHolidays(int $year)
     {
         $bankHolidays = new BankHolidays($this->config, $year);
 

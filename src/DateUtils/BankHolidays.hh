@@ -1,4 +1,4 @@
-<?hh // decl
+<?hh
 
 namespace DateUtils;
 
@@ -9,19 +9,21 @@ namespace DateUtils;
 final class BankHolidays
 {
     /**
-     * @var string
+     * @var int
      */
-    protected $year;
+    protected int $year;
 
     /**
      * @var array
      */
-    protected $bankHolidays;
+    protected array<string> $bankHolidays;
 
-    public function __construct($configArray, $year)
+    public function __construct(array $configArray, int $year)
     {
+        $this->year = $year;
+
         $this->bankHolidays = array_merge(
-            self::calculateFixedHolidays($year),
+            $this->calculateFixedHolidays($year),
             (!empty($configArray['bankHolidays'][$year])) ?
                 $configArray['bankHolidays'][$year] :
                 array()
@@ -32,11 +34,12 @@ final class BankHolidays
      * @param $year
      * @return array
      */
-    public static function calculateFixedHolidays($year)
+    private function calculateFixedHolidays(int $year): array
     {
+        $bankHolidays = array();
         $bankHolidays['newYearsDay'] = date('Y-m-d', strtotime('first day of january ' . $year));
-        $bankHolidays['goodFriday'] = date('Y-m-d', strtotime('previous friday', easter_date($year)));
-        $bankHolidays['easterMonday'] = date('Y-m-d', strtotime('next monday', easter_date($year)));
+        $bankHolidays['goodFriday'] = date('Y-m-d', strtotime('previous friday', $this->easterDate($year)));
+        $bankHolidays['easterMonday'] = date('Y-m-d', strtotime('next monday', $this->easterDate($year)));
         $bankHolidays['earlyMay'] = date('Y-m-d', strtotime('first monday of may ' . $year));
         $bankHolidays['lastMay'] = date('Y-m-d', strtotime('last monday of may ' . $year));
         $bankHolidays['lateAugust'] = date('Y-m-d', strtotime('last monday of august ' . $year));
@@ -49,7 +52,7 @@ final class BankHolidays
     /**
      * @return array
      */
-    public function getBankHolidays()
+    public function getBankHolidays() : array
     {
         return $this->bankHolidays;
     }
@@ -57,24 +60,11 @@ final class BankHolidays
     /**
      * @param int $year
      * @return int
-     *
-     * @note see http://en.wikipedia.org/wiki/Computus
      */
-    public static function easterDate($year)
+    private function easterDate(int $year): int
     {
-        //BC Behaviour
-        if (false === is_int($year)) {
-            $errorMessage = sprintf(
-                '%s %s %d',
-                __FUNCTION__,
-                'expects parameter 1 to be long, string given on line',
-                __LINE__
-            );
-
-            trigger_error($errorMessage, E_USER_WARNING);
-
-            return null;
-        }
+        $lunarAge = $goldenNumber = $century = $fullMoonOffset = 0;
+        $weekday = $sundayOffset = $month = $day = $easterTimeStamp = 0;
 
         $goldenNumber = $year % 19;
         $century = (int)($year / 100);
@@ -86,7 +76,7 @@ final class BankHolidays
         $fullMoonOffset =
             (int)$lunarAge -
             (int)($lunarAge / 28) *
-            (1 - (int)($lunarAge / 28) * (int)(29 / ($lunarAge + 1)) * ((int)(21 - $goldenNumber) / 11));
+            (int)(1 - (int)($lunarAge / 28) * (int)(29 / ($lunarAge + 1)) * ((int)(21 - $goldenNumber) / 11));
 
         $weekday = ($year + (int)($year / 4) + $fullMoonOffset + 2 - $century + (int)($century / 4)) % 7;
 
@@ -100,12 +90,3 @@ final class BankHolidays
     }
 }
 
-/**
- * If we do not have the easter_date function defined, we can create our own, it is less efficient than raw C
- */
-if (false === function_exists('easter_dates')) {
-    function easter_date($year)
-    {
-        return BankHolidays::easterDate($year);
-    }
-}

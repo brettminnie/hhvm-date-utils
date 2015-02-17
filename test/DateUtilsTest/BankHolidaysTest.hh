@@ -27,7 +27,7 @@ class BankHolidaysTest extends \PHPUnit_Framework_TestCase
 
     public function testCalculateFixedHolidays()
     {
-        $holidays = BankHolidays::calculateFixedHolidays(2014);
+        $holidays = $this->bankHolidays->calculateFixedHolidays(2012);
         $this->assertTrue(is_array($holidays));
 
         $this->assertTrue(array_key_exists('newYearsDay', $holidays));
@@ -45,28 +45,10 @@ class BankHolidaysTest extends \PHPUnit_Framework_TestCase
 
     public function testEasterDate()
     {
-        $this->assertEquals(BankHolidays::easterDate(2000), mktime(0, 0, 0, 4, 23, 2000));
-        $this->assertEquals(BankHolidays::easterDate(2005), mktime(0, 0, 0, 3, 27, 2005));
-        $this->assertEquals(BankHolidays::easterDate(2010), mktime(0, 0, 0, 4, 4, 2010));
-        $this->assertEquals(BankHolidays::easterDate(2015), mktime(0, 0, 0, 4, 5, 2015));
-        $this->assertEquals(BankHolidays::easterDate(2020), mktime(0, 0, 0, 4, 12, 2020));
-    }
-
-    public function testEasterDateRaisesWarningWhenANonNumberIsPassed()
-    {
-        $currentClass = $this;
-        $handler = set_error_handler(
-            function($errno, $errstring) use ($currentClass) {
-                $currentClass->assertEquals($errno, E_USER_WARNING);
-                $currentClass->assertEquals(
-                    $errstring,
-                    'easterDate expects parameter 1 to be long, string given on line 71'
-                );
-            }
-        );
-
-        $this->assertNull(BankHolidays::easterDate('invalidNumber'));
-
-        set_error_handler($handler);
+        $this->assertEquals($this->bankHolidays->easterDate(2000), mktime(0, 0, 0, 4, 23, 2000));
+        $this->assertEquals($this->bankHolidays->easterDate(2005), mktime(0, 0, 0, 3, 27, 2005));
+        $this->assertEquals($this->bankHolidays->easterDate(2010), mktime(0, 0, 0, 4, 4, 2010));
+        $this->assertEquals($this->bankHolidays->easterDate(2015), mktime(0, 0, 0, 4, 5, 2015));
+        $this->assertEquals($this->bankHolidays->easterDate(2020), mktime(0, 0, 0, 4, 12, 2020));
     }
 }
