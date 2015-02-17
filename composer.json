@@ -1,0 +1,19 @@
+{
+    "name" : "ministryofjustice/date-utils",
+    "description" : "Utility classes for working day and bank holiday calculations",
+    "type" : "library",
+    "require" : {
+        "php" : ">=5.4"
+    },
+    "require-dev" : {
+        "phpunit/phpunit": "4.0.*"
+    },
+    "autoload" : {
+        "psr-4" : {
+            "DateUtils\\" : "src/DateUtils/"
+        },
+        "classmap": [
+            "Module.php"
+        ]
+    }
+}
