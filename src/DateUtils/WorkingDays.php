@@ -1,4 +1,4 @@
-<?php
+    <?hh
 
 namespace DateUtils;
 
@@ -24,7 +24,7 @@ class WorkingDays
      * @return \DateTime
      * @throws \LogicException
      */
-    public function workingDaysFrom(\DateTime $initialDate = null, $workingDayOffset = 1)
+    public function workingDaysFrom(?\DateTime $initialDate = null, $workingDayOffset = 1)
     {
         if (null === $initialDate) {
             $initialDate = new \DateTime();
