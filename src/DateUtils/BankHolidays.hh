@@ -22,11 +22,13 @@ final class BankHolidays
     {
         $this->year = $year;
 
-        $this->bankHolidays = array_merge(
-            $this->calculateFixedHolidays($year),
-            (!empty($configArray['bankHolidays'][$year])) ?
+        $this->bankHolidays = (!empty($configArray['bankHolidays'][$year])) ?
                 $configArray['bankHolidays'][$year] :
-                array()
+                array();
+
+        $this->bankHolidays = array_merge(
+              $this->calculateFixedHolidays($year),
+              $this->bankHolidays
         );
     }
 
@@ -34,7 +36,7 @@ final class BankHolidays
      * @param $year
      * @return array
      */
-    private function calculateFixedHolidays(int $year): array
+    public function calculateFixedHolidays(int $year): array<string>
     {
         $bankHolidays = array();
         $bankHolidays['newYearsDay'] = date('Y-m-d', strtotime('first day of january ' . $year));
@@ -61,7 +63,7 @@ final class BankHolidays
      * @param int $year
      * @return int
      */
-    private function easterDate(int $year): int
+    public function easterDate(int $year): int
     {
         $lunarAge = $goldenNumber = $century = $fullMoonOffset = 0;
         $weekday = $sundayOffset = $month = $day = $easterTimeStamp = 0;
