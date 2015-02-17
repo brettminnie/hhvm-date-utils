@@ -69,7 +69,7 @@ class WorkingDays
             $initialDate = new \DateTime();
         }
 
-        return $this->workingDaysFromOffset($initialDate, new \DateInterval($workingDayOffset));
+        return $this->workingDaysFromOffset($initialDate, $workingDayOffset);
     }
 
 
