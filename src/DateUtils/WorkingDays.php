@@ -80,7 +80,7 @@ class WorkingDays
      * @param \DateInterval $offset
      * @return \DateTime
      */
-    protected function workingDaysFromOffset(\DateTime $initialDate, \DateInterval $offset) : \DateTime
+    protected function workingDaysFromOffset(\DateTime $initialDate, ?\DateInterval $offset) : \DateTime
     {
         $targetDate = new \DateTime($initialDate->format(\DateTime::ISO8601));
         $diffDate = \DateTime::createFromFormat('Y-m-d h:i:s', $initialDate->format('Y-m-d 00:00:00'));

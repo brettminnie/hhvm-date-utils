@@ -1,4 +1,4 @@
-<?hh
+<?hh //strict
 
 namespace DateUtils;
 
@@ -14,32 +14,38 @@ final class BankHolidays
     protected int $year;
 
     /**
-     * @var array
+     * @var Map
      */
-    protected array<string> $bankHolidays;
+    protected Map<string, string> $bankHolidays;
 
-    public function __construct(array $configArray, int $year)
+    public function __construct(array<string, string> $configArray, int $year)
     {
         $this->year = $year;
+        $this->bankHolidays = new Map(null);
 
-        $this->bankHolidays = (!empty($configArray['bankHolidays'][$year])) ?
-                $configArray['bankHolidays'][$year] :
-                array();
+        if (false === is_null($configArray['bankHolidays'][$year])) {
+            $this->bankHolidays->addAll($configArray['bankHolidays'][$year]);
+        }
 
-        $this->bankHolidays = array_merge(
-              $this->calculateFixedHolidays($year),
-              $this->bankHolidays
-        );
+        $this->bankHolidays->addAll($this->calculateFixedHolidays($year)->toArray());
     }
 
     /**
      * @param $year
      * @return array
      */
-    public function calculateFixedHolidays(int $year): array<string>
+    public function calculateFixedHolidays(int $year): Map<string, string>
     {
-        $bankHolidays = array();
-        $bankHolidays['newYearsDay'] = date('Y-m-d', strtotime('first day of january ' . $year));
+        $bankHolidays = new Map(null);
+
+        $bankHolidays->add(
+            new Pair(
+                'newYearsDay',
+                date('Y-m-d', strtotime('first day of january ' . $year)
+                )
+            )
+        );
+
         $bankHolidays['goodFriday'] = date('Y-m-d', strtotime('previous friday', $this->easterDate($year)));
         $bankHolidays['easterMonday'] = date('Y-m-d', strtotime('next monday', $this->easterDate($year)));
         $bankHolidays['earlyMay'] = date('Y-m-d', strtotime('first monday of may ' . $year));
@@ -54,7 +60,7 @@ final class BankHolidays
     /**
      * @return array
      */
-    public function getBankHolidays() : array
+    public function getBankHolidays() : Map<string, string>
     {
         return $this->bankHolidays;
     }
