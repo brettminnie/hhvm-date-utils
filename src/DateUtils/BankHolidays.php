@@ -1,4 +1,4 @@
-<?hh //strict
+<?hh //decl
 
 namespace DateUtils;
 
@@ -24,7 +24,9 @@ final class BankHolidays
         $this->bankHolidays = new Map(null);
 
         if (false === is_null($configArray['bankHolidays'][$year])) {
-            $this->bankHolidays->addAll($configArray['bankHolidays'][$year]);
+            foreach($configArray['bankHolidays'][$year] as $key=>$value) {
+                $this->bankHolidays[$key] = $value;
+            }
         }
 
         $this->bankHolidays->addAll($this->calculateFixedHolidays($year)->toArray());
@@ -38,14 +40,7 @@ final class BankHolidays
     {
         $bankHolidays = new Map(null);
 
-        $bankHolidays->add(
-            new Pair(
-                'newYearsDay',
-                date('Y-m-d', strtotime('first day of january ' . $year)
-                )
-            )
-        );
-
+        $bankHolidays['newYearsDay'] = date('Y-m-d', strtotime('first day of january ' . $year));
         $bankHolidays['goodFriday'] = date('Y-m-d', strtotime('previous friday', $this->easterDate($year)));
         $bankHolidays['easterMonday'] = date('Y-m-d', strtotime('next monday', $this->easterDate($year)));
         $bankHolidays['earlyMay'] = date('Y-m-d', strtotime('first monday of may ' . $year));

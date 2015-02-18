@@ -11,11 +11,11 @@ class WorkingDays
     /**
      * @var array
      */
-    protected array<string> $config;
+    protected Map $config;
 
-    public function __construct(array<string> $config)
+    public function __construct(array<string, string> $config)
     {
-        $this->config = $config;
+        $this->config = new Map($config);
     }
 
     /**
@@ -170,7 +170,7 @@ class WorkingDays
      */
     protected function getBankHolidays(int $year)
     {
-        $bankHolidays = new BankHolidays($this->config, $year);
+        $bankHolidays = new BankHolidays($this->config->toArray(), $year);
 
         return $bankHolidays->getBankHolidays();
     }
